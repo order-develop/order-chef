@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.chef.dao.mapper.OrderDetailMapper">
+    <resultMap id="BaseResultMap" type="com.example.chef.model.OrderDetail">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="food_package_id" property="foodPackageId" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="used_flag" property="usedFlag" jdbcType="INTEGER"/>
+        <result column="c_time" property="cTime" jdbcType="TIMESTAMP"/>
+        <result column="m_time" property="mTime" jdbcType="TIMESTAMP"/>
+        <result column="package_Price" property="packagePrice" jdbcType="DECIMAL"/>
+        <result column="package_number" property="packageNumber" javaType="INTEGER"/>
+        <result column="order_id" property="orderId" javaType="STRING"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, user_id, food_package_id, status, used_flag, c_time, m_time, package_Price,Package_number,order_id
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from order_detail
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.example.chef.model.OrderDetail">
+    insert into order_detail (id, user_id, food_package_id, 
+      status, used_flag, c_time, 
+      m_time, package_Price)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{foodPackageId,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{usedFlag,jdbcType=INTEGER}, #{cTime,jdbcType=TIMESTAMP}, 
+      #{mTime,jdbcType=TIMESTAMP}, #{packagePrice,jdbcType=DECIMAL})
+  </insert>
+    <insert id="insertSelective" parameterType="com.example.chef.model.OrderDetail" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into order_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="foodPackageId != null">
+                food_package_id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="usedFlag != null">
+                used_flag,
+            </if>
+            <if test="cTime != null">
+                c_time,
+            </if>
+            <if test="mTime != null">
+                m_time,
+            </if>
+            <if test="packagePrice != null">
+                package_Price,
+            </if>
+            <if test="packageNumber != null">
+                package_number,
+            </if>
+            <if test="orderId != null">
+                order_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="foodPackageId != null">
+                #{foodPackageId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="usedFlag != null">
+                #{usedFlag,jdbcType=INTEGER},
+            </if>
+            <if test="cTime != null">
+                #{cTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mTime != null">
+                #{mTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="packagePrice != null">
+                #{packagePrice,jdbcType=DECIMAL},
+            </if>
+            <if test="packageNumber != null">
+                #{packageNumber,jdbcType=INTEGER},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.example.chef.model.OrderDetail">
+        update order_detail
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="foodPackageId != null">
+                food_package_id = #{foodPackageId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="usedFlag != null">
+                used_flag = #{usedFlag,jdbcType=INTEGER},
+            </if>
+            <if test="cTime != null">
+                c_time = #{cTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mTime != null">
+                m_time = #{mTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="packagePrice != null">
+                package_Price = #{packagePrice,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.example.chef.model.OrderDetail">
+    update order_detail
+    set user_id = #{userId,jdbcType=INTEGER},
+      food_package_id = #{foodPackageId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      used_flag = #{usedFlag,jdbcType=INTEGER},
+      c_time = #{cTime,jdbcType=TIMESTAMP},
+      m_time = #{mTime,jdbcType=TIMESTAMP},
+      package_Price = #{packagePrice,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="listNowOrder" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from order_detail
+        where TO_DAYS(c_time) =TO_DAYS(now())
+        order by c_time DESC
+    </select>
+    <select id="listOrderingCountAndUserNames" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from order_detail
+        where food_package_id=#{foodPackageId} and status=1 and TO_DAYS(c_time) =TO_DAYS(now())
+    </select>
+    <select id="listHistoryOrderByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from order_detail
+        <where>
+            <if test="userId != null">
+                user_id=#{userId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="startTime!=null">
+                and c_time >= #{startTime}
+            </if>
+            <if test="endTime!=null">
+                and #{endTime} >= c_time
+            </if>
+        </where>
+        order by c_time DESC
+    </select>
+    <select id="listHistoryOrder" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM order_detail
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="startTime!=null">
+                and c_time >= #{startTime}
+            </if>
+            <if test="endTime!=null">
+                and #{endTime} >= c_time
+            </if>
+        </where>
+        GROUP BY user_id ORDER BY c_time DESC
+    </select>
+
+    <select id="listPaidHistoryOrderByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from order_detail
+        where user_id=#{userId} and status =1
+    </select>
+    <update id="updateOrderByOrderId" parameterType="com.example.chef.model.OrderDetail">
+        update order_detail
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="foodPackageId != null">
+                food_package_id = #{foodPackageId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="usedFlag != null">
+                used_flag = #{usedFlag,jdbcType=INTEGER},
+            </if>
+            <if test="cTime != null">
+                c_time = #{cTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mTime != null">
+                m_time = #{mTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="packagePrice != null">
+                package_Price = #{packagePrice,jdbcType=DECIMAL},
+            </if>
+            <if test="packageNumber != null">
+                package_number = #{package_number},
+            </if>
+        </set>
+        where order_id = #{orderId,jdbcType=VARCHAR}
+    </update>
+    <select id="listOrderTakeMealsStatus" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from order_detail
+        where TO_DAYS(c_time) =TO_DAYS(now())
+        order by c_time DESC
+    </select>
+    <select id="getOrderByorderId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from order_detail
+        where order_id =#{orderId}
+    </select>
+    <select id="listHistoryOrderInfo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM order_detail
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="startTime!=null">
+                and c_time >= #{startTime}
+            </if>
+            <if test="endTime!=null">
+                and #{endTime} >= c_time
+            </if>
+        </where>
+        ORDER BY  user_id ASC,c_time DESC
+    </select>
+</mapper>

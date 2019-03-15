@@ -1,0 +1,55 @@
+mybatis:
+  #mapper.xml所在位置
+  mapper-locations: classpath:mybatis/*.xml
+spring:
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+  freemarker:
+    cache: false
+    charset: utf-8
+    enabled: true
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    primary:
+      driverClassName: com.mysql.jdbc.Driver
+      username: schu
+      password: test40
+      url: jdbc:mysql://192.168.188.210:3306/school
+      type: com.alibaba.druid.pool.DruidDataSource
+    slave:
+      driver-class-name: com.mysql.jdbc.Driver
+      username: root
+      password: 123456
+      url: jdbc:mysql://192.168.188.222:3306/ordering
+      type: com.alibaba.druid.pool.DruidDataSource
+    prod:
+      driver-class-name: com.mysql.jdbc.Driver
+      username: schu
+      password: test40
+      url: jdbc:mysql://192.168.188.191:3306/school
+      type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 2000
+server:
+  port: 8085
+
+#diy.user:
+#  id: 12
+#logging:
+#  file: /log.txt
+#  level: trace
+#
+#mybatis-plus:
+#  mapper-locations: classpath:mybatis/master/*.xml
+#  typeAliasesPackage:
+#  global-config:
+#    id-type: 3
+#    refresh-mapper: true
+#    capital-mode: true
+#    field-strategy: 2
+#    db-column-underline: false
+
+
